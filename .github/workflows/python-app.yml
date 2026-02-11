@@ -26,9 +26,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest poetry poetry-plugin-shell
-        python3 -m venv .venv
-        poetry shell
+        pip install flake8 pytest poetry
         poetry install
     - name: Lint with flake8
       run: |
