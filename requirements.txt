@@ -1,2 +1,7 @@
 dotenv>=0.9.9
 python-telegram-bot>=22.6
+SQLAlchemy==2.0.46
+selenium==4.40.0
+pyzbar==0.1.9
+pandas==3.0.0
+bs4==0.0.2
