@@ -2,6 +2,7 @@ import os
 import re
 from datetime import datetime, date
 from decimal import Decimal
+from typing import Optional, Dict
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters, CallbackQueryHandler
@@ -227,43 +228,63 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "/excluir - Excluir transação\n"
         "/recentes - Ver últimas transações\n\n"
         "💡 Você também pode enviar mensagens como:\n"
-        "'gastei 50 reais com alimentação'\n"
-        "'recebi 1000 de salário'"
+        "'gastei 50 reais com alimentação - almoço no trabalho'\n"
+        "'recebi 1000 de salário - pagamento mensal'\n"
+        "'comprei material de escritório por 150 reais'\n"
+        "'paguei aluguel de 800 - apartamento'"
     )
 
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(f'Hello {update.effective_user.first_name}')
 
-def parse_financial_message(text: str):
-    text = text.lower().strip()
+def parse_financial_message(text: str) -> Optional[Dict]:
+    text = text.lower()
     
-    # Pattern for expense messages
+    # Patterns for expense messages - mais flexíveis para capturar descrição
     expense_patterns = [
-        r'gastei\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:com|em|para|de|do|da)?\s*([\w\s]+)',
-        r'despesa\s+(\d+(?:[.,]\d+)?)\s*([\w\s]+)',
-        r'paguei\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:com|em|para|de|do|da)?\s*([\w\s]+)'
+        r'gastei\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:com|em|para|de|do|da)?\s*([\w\s]+)(?:\s*[-:]\s*(.+))?',
+        r'despesa\s+(\d+(?:[.,]\d+)?)\s*([\w\s]+)(?:\s*[-:]\s*(.+))?',
+        r'paguei\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:com|em|para|de|do|da)?\s*([\w\s]+)(?:\s*[-:]\s*(.+))?',
+        r'comprei\s+([\w\s]+?)\s*por\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?)?',
+        r'pago\s+([\w\s]+?)\s*de\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?)?'
     ]
     
-    # Pattern for income messages
+    # Pattern for income messages - mais flexíveis para capturar descrição
     income_patterns = [
-        r'recebi\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:de|do|da)?\s*([\w\s]+)',
-        r'renda\s+(\d+(?:[.,]\d+)?)\s*([\w\s]+)',
-        r'ganhei\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:com|em)?\s*([\w\s]+)'
+        r'recebi\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:de|do|da)?\s*([\w\s]+)(?:\s*[-:]\s*(.+))?',
+        r'renda\s+(\d+(?:[.,]\d+)?)\s*([\w\s]+)(?:\s*[-:]\s*(.+))?',
+        r'ganhei\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:com|em)?\s*([\w\s]+)(?:\s*[-:]\s*(.+))?',
+        r'depositei\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:na|em)?\s*([\w\s]+)(?:\s*[-:]\s*(.+))?',
+        r'entraram\s+r?\$?\s*(\d+(?:[.,]\d+)?)\s*(?:reais?\s*)?(?:na|em)?\s*([\w\s]+)(?:\s*[-:]\s*(.+))?'
     ]
     
+    # Verificar patterns de despesa
     for pattern in expense_patterns:
         match = re.search(pattern, text)
         if match:
-            amount = float(match.group(1).replace(',', '.'))
-            category = match.group(2).strip()
-            return {'type': 'despesa', 'amount': amount, 'category': category}
+            # Para patterns "comprei" e "pago", a ordem é diferente
+            if 'comprei' in pattern or 'pago' in pattern:
+                category = match.group(1).strip()
+                amount = float(match.group(2).replace(',', '.'))
+                description = f'compra por {amount}' if 'comprei' in pattern else f'pagamento de {amount}'
+            else:
+                amount = float(match.group(1).replace(',', '.'))
+                category = match.group(2).strip() if len(match.groups()) > 1 and match.group(2) else ''
+                description = match.group(3).strip() if len(match.groups()) > 2 and match.group(3) else ''
+            
+            if category:
+                return {'type': 'despesa', 'amount': amount, 'category': category, 'description': description}
     
+    # Verificar patterns de receita
     for pattern in income_patterns:
         match = re.search(pattern, text)
         if match:
             amount = float(match.group(1).replace(',', '.'))
-            category = match.group(2).strip()
-            return {'type': 'receita', 'amount': amount, 'category': category}
+            category = match.group(2).strip() if len(match.groups()) > 1 and match.group(2) else ''
+            description = match.group(3).strip() if len(match.groups()) > 2 and match.group(3) else ''
+            
+            if category:
+                return {'type': 'receita', 'amount': amount, 'category': category, 'description': description}
     
     return None
 
@@ -277,7 +298,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     parsed = parse_financial_message(text)
     
     if parsed:
-        result = await add_transaction(user_id, parsed['type'], parsed['amount'], parsed['category'])
+        description = parsed.get('description', '')
+        result = await add_transaction(user_id, parsed['type'], parsed['amount'], parsed['category'], description)
         await update.message.reply_text(result)
     else:
         await update.message.reply_text(
@@ -732,10 +754,11 @@ async def ajuda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message += "/metas - Metas financeiras\n"
     message += "/ajuda - Esta ajuda\n\n"
     message += "💡 *Mensagens inteligentes:*\n"
-    message += "'gastei 50 reais com alimentação'\n"
-    message += "'recebi 1000 de salário'\n"
-    message += "'paguei 200 de aluguel'\n"
-    message += "'ganhei 500 freelancer'\n\n"
+    message += "'gastei 50 reais com alimentação - almoço no trabalho'\n"
+    message += "'recebi 1000 de salário - pagamento mensal'\n"
+    message += "'comprei material de escritório por 150 reais'\n"
+    message += "'paguei aluguel de 800 - apartamento'\n"
+    message += "'ganhei 500 freelancer - projeto website'\n\n"
     message += "🔧 *Gerenciamento:*\n"
     message += "Use /recentes para ver os IDs das transações\n"
     message += "Use /editar <id> para modificar\n"
