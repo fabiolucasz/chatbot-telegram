@@ -36,7 +36,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "/categorias - Listar categorias\n"
             "/metas - Gerenciar metas financeiras\n"
             "/excluir - Excluir transação\n"
-            "/recentes - Ver últimas transações\n\n"
+            "/extrato - Ver extrato\n\n"
             "💡 *Mensagens inteligentes:*\n"
             "'gastei 50 reais com alimentação - almoço no trabalho'\n"
             "'recebi 1000 de salário - pagamento mensal'\n"

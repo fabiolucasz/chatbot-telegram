@@ -13,6 +13,7 @@ from command_menu.edit_command import editar
 from command_menu.category_command import categorias
 from command_menu.goal_command import metas
 from command_menu.report_command import relatorio
+from command_menu.statement_command import extrato
 
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters, CallbackQueryHandler
 from photo_handler import handle_photo, handle_document, nf_callback_handler
@@ -151,6 +152,7 @@ app.add_handler(CommandHandler("saldo", saldo))
 app.add_handler(CommandHandler("relatorio", relatorio))
 app.add_handler(CommandHandler("categorias", categorias))
 app.add_handler(CommandHandler("metas", metas))
+app.add_handler(CommandHandler("extrato", extrato))
 app.add_handler(CommandHandler("ajuda", ajuda))
 
 app.add_handler(CallbackQueryHandler(button_callback, pattern="^(confirm_delete_|cancel_delete_)"))
