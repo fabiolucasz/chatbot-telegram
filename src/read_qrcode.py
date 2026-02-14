@@ -8,7 +8,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import pandas as pd
+import os
+from dotenv import load_dotenv
 
+# Carregar variáveis de ambiente
+load_dotenv()
 
 class ReadQrcode:
     def __init__(self):
@@ -25,6 +29,7 @@ class ReadQrcode:
 
     def extract_nf_data(self, image_path):
         """Método principal para extrair dados da NF"""
+        driver = None
         try:
             url = self.read_qrcode(image_path)
 
@@ -32,6 +37,10 @@ class ReadQrcode:
                 print("Não foi possível ler o QR Code")
                 return None
 
+            # Obter URL do Selenium remoto das variáveis de ambiente
+            selenium_remote_url = os.getenv('SELENIUM_REMOTE_URL', 'http://selenium:4444')
+            
+            # Configurar opções para o Chrome remoto
             options = Options()
             options.add_argument('--disable-blink-features=AutomationControlled')
             options.add_argument('--user-agent=' + self.user_agent)
@@ -47,9 +56,12 @@ class ReadQrcode:
             options.add_argument('--headless')
             options.add_argument('--disable-features=IsolateOrigins')
 
-        
-
-            driver = webdriver.Chrome(options=options)
+            # Conectar ao Selenium remoto
+            driver = webdriver.Remote(
+                command_executor=selenium_remote_url,
+                options=options
+            )
+            
             driver.get(url)
 
             WebDriverWait(driver, 10).until(
@@ -64,7 +76,7 @@ class ReadQrcode:
             print(f"Erro ao extrair dados da NF: {str(e)}")
             return None
         finally:
-            if 'driver' in locals():
+            if driver:
                 driver.quit()
 
     def extract_data_from_soup(self, soup):

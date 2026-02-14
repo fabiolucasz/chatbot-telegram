@@ -5,3 +5,4 @@ selenium==4.40.0
 pyzbar==0.1.9
 pandas==3.0.0
 bs4==0.0.2
+Pillow>=10.0.0

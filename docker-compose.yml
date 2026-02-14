@@ -1,0 +1,20 @@
+
+services:
+    selenium:
+        image: selenium/standalone-chrome:latest
+        container_name: selenium
+        ports:
+            - "4444:4444"
+        environment:
+            - SE_NODE_MAX_SESSIONS=5
+            - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+            - SE_SESSION_RETRY_INTERVAL=5000
+    bot:
+        build: .
+        container_name: bot
+        ports:
+            - "8000:8000"
+        depends_on:
+            - selenium
+        environment:
+            - SELENIUM_REMOTE_URL=http://selenium:4444
