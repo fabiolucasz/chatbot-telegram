@@ -56,11 +56,15 @@ class ReadQrcode:
             options.add_argument('--headless')
             options.add_argument('--disable-features=IsolateOrigins')
 
-            # Conectar ao Selenium remoto
-            driver = webdriver.Remote(
-                command_executor=selenium_remote_url,
-                options=options
-            )
+            
+            try:
+                # Conectar ao Selenium remoto
+                driver = webdriver.Remote(
+                    command_executor=selenium_remote_url,
+                    options=options
+                )
+            except:
+                driver = webdriver.Chrome(options=options)
             
             driver.get(url)
 
@@ -104,16 +108,6 @@ class ReadQrcode:
                 'valor_unitario': span_valor_unitario[i] if i < len(span_valor_unitario) else '',
                 'valor_total': span_valor_total[i] if i < len(span_valor_total) else '',
             }
-
-        # Resumo da nota
-        quantidade_itens = soup.find('span', {'class': 'totalNumb'})
-        valor_total = soup.find('span', {'class': 'txtTit'})
-        descontos = soup.find('span', {'class': 'txtTit'})
-        valor_a_pagar = soup.find('span', {'class': 'txtTit'})
-        valor_pago = soup.find('span', {'class': 'txtTit'})
-        forma_pagamento = soup.find('span', {'class': 'txtTit'})
-        impostos_totais = "a"
-
 
         return {
             'shop_info': {

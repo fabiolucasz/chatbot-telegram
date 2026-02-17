@@ -161,7 +161,7 @@ app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
 app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
 app.add_handler(MessageHandler(filters.Document.ALL, handle_document))
-app.add_handler(CallbackQueryHandler(nf_callback_handler, pattern=r'^(add_all_nf|cancel_nf)$'))
+app.add_handler(CallbackQueryHandler(nf_callback_handler, pattern=r'^(nf_cat_|confirm_nf_add|cancel_nf)'))
 
 print("🤖 Bot financeiro iniciado!")
 app.run_polling()
