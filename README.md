@@ -82,7 +82,8 @@ docker exec bot python -c "from src.read_qrcode import ReadQrcode; print('✅ Im
 
 ### Mensagens Inteligentes
 
-![Mensagens Inteligentes](pics/img1.jpeg)
+
+<img src="pics/img1.jpeg" alt="Mensagens Inteligentes" width="200">
 
 O bot reconhece linguagem natural para registrar transações:
 - "Gastei 50 reais com alimentação"
@@ -91,7 +92,7 @@ O bot reconhece linguagem natural para registrar transações:
 
 ### Leitura de QR Code
 
-![Leitura de QR Code](pics/img2.jpeg)
+<img src="pics/img2.jpeg" alt="Leitura de QR Code" width="200">
 
 Processo automático de extração de dados da nota fiscal:
 1. 📸 Envie uma foto da nota fiscal
@@ -100,7 +101,7 @@ Processo automático de extração de dados da nota fiscal:
 
 ### Seleção de Categoria
 
-![Seleção de Categoria](pics/img3.jpeg)
+<img src="pics/img3.jpeg" alt="Seleção de Categoria" width="200">
 
 Interface intuitiva para organização:
 - 🏷️ Categorias personalizadas disponíveis
@@ -109,7 +110,7 @@ Interface intuitiva para organização:
 
 ### Confirmação de Registro
 
-![Confirmação de Registro](pics/img4.jpeg)
+<img src="pics/img4.jpeg" alt="Confirmação de Registro" width="200">
 
 Tela de confirmação com detalhes completos:
 - 📊 Resumo das transações
@@ -118,7 +119,7 @@ Tela de confirmação com detalhes completos:
 
 ### Demonstração Completa
 
-![Demo Completa](pics/img5.jpeg)
+<img src="pics/img5.jpeg" alt="Demo Completa" width="200">
 
 Fluxo completo de uso:
 1. 📸 Envie uma foto da nota fiscal
