@@ -80,28 +80,52 @@ docker exec bot python -c "from src.read_qrcode import ReadQrcode; print('✅ Im
 
 ## 📸 Screenshots
 
-### Bot em Funcionamento
+### Mensagens Inteligentes
 
-![Demo do Bot](pics/demo.mp4)
+![Mensagens Inteligentes](pics/img1.jpeg)
 
-**Fluxo de uso:**
+O bot reconhece linguagem natural para registrar transações:
+- "Gastei 50 reais com alimentação"
+- "Recebi 1000 de salário" 
+- "Comprei material por 150 reais"
+
+### Leitura de QR Code
+
+![Leitura de QR Code](pics/img2.jpeg)
+
+Processo automático de extração de dados da nota fiscal:
+1. 📸 Envie uma foto da nota fiscal
+2. 🧾 O bot lê o QR Code automaticamente
+3. 📋 Exibe todos os itens encontrados
+
+### Seleção de Categoria
+
+![Seleção de Categoria](pics/img3.jpeg)
+
+Interface intuitiva para organização:
+- 🏷️ Categorias personalizadas disponíveis
+- 🏪 Opção de usar nome da loja
+- 📱 Botões interativos fáceis de usar
+
+### Confirmação de Registro
+
+![Confirmação de Registro](pics/img4.jpeg)
+
+Tela de confirmação com detalhes completos:
+- 📊 Resumo das transações
+- 💰 Valor total calculado
+- ✅ Confirmação segura antes de salvar
+
+### Demonstração Completa
+
+![Demo Completa](pics/img5.jpeg)
+
+Fluxo completo de uso:
 1. 📸 Envie uma foto da nota fiscal
 2. 🧾 O bot lê o QR Code automaticamente
 3. 📋 Exibe todos os itens encontrados
 4. 🏷️ Permite selecionar a categoria
 5. ✅ Confirma o registro das despesas
-
-## �💡 Mensagens Inteligentes
-
-O bot reconhece linguagem natural para registrar transações:
-
-```
-"gastei 50 reais com alimentação - almoço no trabalho"
-"recebi 1000 de salário - pagamento mensal"
-"comprei material de escritório por 150 reais"
-"paguei aluguel de 800 - apartamento"
-"ganhei 500 freelancer - projeto website"
-```
 
 ## 🧾 Processamento de Notas Fiscais
 
