@@ -71,7 +71,6 @@ docker exec bot python -c "from src.read_qrcode import ReadQrcode; print('✅ Im
 | Comando | Descrição |
 |---------|-----------|
 | `/start` | Inicia o bot e configura categorias padrão |
-| `/adicionar` | Adiciona transações manualmente |
 | `/saldo` | Verifica saldo atual |
 | `/extrato` | Exibe extrato do mês corrente |
 | `/relatorio` | Gera relatório mensal |
