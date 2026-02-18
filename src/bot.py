@@ -1,11 +1,10 @@
 import os
 import re
-from datetime import date
 from typing import Optional, Dict
 from dotenv import load_dotenv
 from telegram import Update
 from command_menu.start_command import start
-from command_menu.add_command import adicionar, add_transaction
+from command_menu.add_command import add_transaction
 from command_menu.balance_command import saldo
 from command_menu.help_command import ajuda
 from command_menu.delete_command import excluir
@@ -145,7 +144,6 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 app = ApplicationBuilder().token(BOT_TOKEN).build()
 
 app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("adicionar", adicionar))
 app.add_handler(CommandHandler("editar", editar))
 app.add_handler(CommandHandler("excluir", excluir))
 app.add_handler(CommandHandler("saldo", saldo))

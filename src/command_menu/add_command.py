@@ -35,30 +35,3 @@ async def add_transaction(user_id: int, trans_type: str, amount: float, category
     finally:
         session.close()
 
-
-async def adicionar(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """ Função que interage com o usuário para adicionar uma transação ao banco de dados """
-    user_id = update.effective_user.id
-    
-    if len(context.args) < 3:
-        await update.message.reply_text(
-            "❌ Formato incorreto!\n\n"
-            "Use: /adicionar <tipo> <valor> <categoria>\n"
-            "Exemplo: /adicionar despesa 50.00 alimentação"
-        )
-        return
-    
-    trans_type = context.args[0].lower()
-    if trans_type not in ['receita', 'despesa']:
-        await update.message.reply_text("❌ Tipo deve ser 'receita' ou 'despesa'")
-        return
-    
-    try:
-        amount = float(context.args[1].replace(',', '.'))
-        category = ' '.join(context.args[2:])
-        
-        result = await add_transaction(user_id, trans_type, amount, category)
-        await update.message.reply_text(result)
-        
-    except ValueError:
-        await update.message.reply_text("❌ Valor inválido! Use um número como 50.00")

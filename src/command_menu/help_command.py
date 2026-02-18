@@ -7,7 +7,6 @@ async def ajuda(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = "🤖 *Ajuda do Bot Financeiro*\n\n"
     message += "📌 *Comandos:*\n"
     message += "/start - Iniciar o bot\n"
-    message += "/adicionar <tipo> <valor> <categoria> - Adicionar transação\n"
     message += "/editar <id> [valor] [categoria] - Editar transação (ou /editar para ver últimos 10)\n"
     message += "/excluir <id> - Excluir transação\n"
     message += "/recentes - Listar transações recentes\n"
