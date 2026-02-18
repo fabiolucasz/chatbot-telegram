@@ -111,7 +111,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     if data.startswith("confirm_delete_"):
         transaction_id = int(data.split("_")[2])
         
-        success = await delete_transaction(user_id, transaction_id)
+        success = await excluir(user_id, transaction_id)
         
         if success:
             # Buscar transação para mostrar mensagem
