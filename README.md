@@ -78,11 +78,11 @@ docker exec bot python -c "from src.read_qrcode import ReadQrcode; print('✅ Im
 | `/metas` | Gerencia metas financeiras |
 | `/ajuda` | Exibe menu de ajuda |
 
-## � Screenshots
+## 📸 Screenshots
 
 ### Bot em Funcionamento
 
-![Bot em Funcionamento](pics/image.png)
+![Demo do Bot](pics/demo.mp4)
 
 **Fluxo de uso:**
 1. 📸 Envie uma foto da nota fiscal
